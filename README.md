@@ -1,3 +1,29 @@
+# Pretraining ELECTRA
+
+## How to 
+
+- prepare data and hparams.json
+```
+$ mkdir data/kor
+
+* copy wordpiece vocab.txt(from base-base or somewhere)
+$ ls data/kor/vocab.txt
+
+* prepare corpus
+$ ls data/kor/corpus
+
+* prepare hparams.json
+$ ls data/kor/hparams.json
+```
+
+- train
+```
+$ ./train.sh -v -v
+```
+
+----
+
+
 # ELECTRA
 
 ## Introduction
