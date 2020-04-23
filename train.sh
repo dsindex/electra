@@ -112,5 +112,5 @@ function pretrain {
         --hparams ${HPARAMS_FILE}
 }
 
-#build_dataset
-pretraining
+build_dataset
+pretrain
