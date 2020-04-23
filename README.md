@@ -19,6 +19,7 @@ $ ls data/kor/hparams.json
 - train
 ```
 $ ./train.sh -v -v
+$ tensorboard --logdir data/kor/models/kor-electra-base --port port-number
 ```
 
 ----

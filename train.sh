@@ -113,4 +113,5 @@ function pretrain {
 }
 
 build_dataset
+rm -rf ${DATA_DIR}/models/${MODEL_NAME}
 pretrain
