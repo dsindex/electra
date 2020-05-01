@@ -6,7 +6,7 @@
 ```
 $ mkdir data/kor
 
-* copy wordpiece vocab.txt(from base-base or somewhere)
+* copy wordpiece vocab.txt(from Korean BERT-base or somewhere)
 $ ls data/kor/vocab.txt
 
 * prepare corpus
