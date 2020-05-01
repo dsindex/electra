@@ -22,6 +22,11 @@ $ ./train.sh -v -v
 $ tensorboard --logdir data/kor/models/kor-electra-base --port port-number
 ```
 
+- convert to hf transformers format
+```
+$ python convert_electra_original_tf_checkpoint_to_pytorch.py --tf_checkpoint_path=./data/kor/models/kor-electra-base/model.ckpt-1000000 --config_file=./data/kor/config-hf-kor-electra-base.json  --pytorch_dump_path ./data/kor/kor-electra-base.pt --discriminator_or_generator discriminator
+```
+
 ----
 
 
