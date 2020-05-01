@@ -93,13 +93,15 @@ VOCAB_FILE=${DATA_DIR}/vocab.txt
 RECORD_DIR=${DATA_DIR}/pretrain_tfrecords
 MODEL_NAME=kor-electra-base
 HPARAMS_FILE=${DATA_DIR}/hparams.json
+MAX_SEQ_LENGTH=512
 
 function build_dataset {
+    rm -rf ${RECORD_DIR}
     python build_pretraining_dataset.py \
         --corpus-dir ${CORPUS_DIR} \
         --vocab-file ${VOCAB_FILE} \
         --output-dir ${RECORD_DIR} \
-        --max-seq-length 128 \
+        --max-seq-length ${MAX_SEQ_LENGTH} \
         --num-processes 5 \
         --blanks-separate-docs True \
         --no-lower-case # for Korean
