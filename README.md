@@ -21,7 +21,7 @@ $ ls data/kor/hparams.json
 $ ./train.sh -v -v
 $ tensorboard --logdir data/kor/models/kor-electra-base --port port-number
 ```
-![train loss](./loss.png)
+![train loss](./loss200k.png)
 
 - convert to hf transformers format
 ```
