@@ -7,17 +7,35 @@
 $ mkdir data/kor
 
 * copy wordpiece vocab.txt(from Korean BERT-base or somewhere)
-$ ls data/kor/vocab.txt
+$ wc -l data/kor/vocab.txt
+100102 data/kor/vocab.txt
 
 * prepare corpus
 $ ls data/kor/corpus
+-rw-r--r-- 1 root root 2.6M Apr 23 10:07 data.txt.valid
+-rw-r--r-- 1 root root 2.8G Apr 23 10:07 data.txt.train
 
 * prepare hparams.json
-$ ls data/kor/hparams.json
+$ cat data/kor/hparams.json
+{
+  "model_size": "base",
+  "learning_rate": 1e-5,
+  "generator_hidden_size": 0.333,
+  "vocab_size": 100102,
+  "do_lower_case": false,
+  "train_batch_size": 16,
+  "eval_batch_size": 32,
+  "num_train_steps": 1000000,
+  "max_seq_length": 512,
+  "model_hparam_overrides": {
+    "max_position_embeddings": 512
+  }
+}
 ```
 
 - train
 ```
+* training using Tesla V100 1GPU, 32G memory
 $ ./train.sh -v -v
 $ tensorboard --logdir data/kor/models/kor-electra-base --port port-number
 ```
