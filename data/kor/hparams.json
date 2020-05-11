@@ -7,6 +7,7 @@
   "train_batch_size": 16,
   "eval_batch_size": 32,
   "num_train_steps": 1000000,
+  "save_checkpoints_steps": 25000,
   "max_seq_length": 512,
   "model_hparam_overrides": {
     "max_position_embeddings": 512
