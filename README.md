@@ -37,6 +37,7 @@ $ cat data/kor/hparams.json
 
 - train
 ```
+$ ./generate_dataset.sh -v -v
 * training using Tesla V100 1GPU, 32G memory
 $ ./train.sh -v -v
 $ tensorboard --logdir data/kor/models/kor-electra-base --port port-number

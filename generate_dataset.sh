@@ -88,15 +88,21 @@ CDIR=$(readlink -f $(dirname $(readlink -f ${BASH_SOURCE[0]})))
 PDIR=$(readlink -f $(dirname $(readlink -f ${BASH_SOURCE[0]}))/..)
 
 DATA_DIR=${CDIR}/data/kor
+CORPUS_DIR=${DATA_DIR}/corpus
+VOCAB_FILE=${DATA_DIR}/vocab.txt
 RECORD_DIR=${DATA_DIR}/pretrain_tfrecords
-MODEL_NAME=kor-electra-base
-HPARAMS_FILE=${DATA_DIR}/hparams.json
+MAX_SEQ_LENGTH=512
 
-function pretrain {
-    python run_pretraining.py \
-        --data-dir ${DATA_DIR} \
-        --model-name ${MODEL_NAME} \
-        --hparams ${HPARAMS_FILE}
+function build_dataset {
+    rm -rf ${RECORD_DIR}
+    python build_pretraining_dataset.py \
+        --corpus-dir ${CORPUS_DIR} \
+        --vocab-file ${VOCAB_FILE} \
+        --output-dir ${RECORD_DIR} \
+        --max-seq-length ${MAX_SEQ_LENGTH} \
+        --num-processes 5 \
+        --blanks-separate-docs True \
+        --no-lower-case # for Korean
 }
 
-pretrain
+build_dataset
