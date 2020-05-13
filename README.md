@@ -60,7 +60,7 @@ $ cat data/kor/hparams.json
   "do_lower_case": false,
   "train_batch_size": 16,
   "eval_batch_size": 32,
-  "num_train_steps": 1800000,      <- stop at 800k, alpha = 1M
+  "num_train_steps": 1880000,      <- stop at 880k, alpha = 1M
   "save_checkpoints_steps": 10000,
   "num_eval_steps": 1000,
   "max_seq_length": 512,
@@ -69,7 +69,7 @@ $ cat data/kor/hparams.json
   }
 }
 ```
-![train loss](./loss240k.png)
+![train loss](./loss945k.png)
 
 - convert to hf transformers format
 ```
