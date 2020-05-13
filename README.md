@@ -15,6 +15,10 @@ $ ls data/kor/corpus
 -rw-r--r-- 1 root root 2.6M Apr 23 10:07 data.txt.valid
 -rw-r--r-- 1 root root 2.8G Apr 23 10:07 data.txt.train
 
+* prepare corpus news
+$ ls data/kor/corpus_news
+-rw-r--r-- 1 root root 30G May  9 22:44 news-sent.txt
+
 * prepare hparams.json
 $ cat data/kor/hparams.json
 {
@@ -41,6 +45,29 @@ $ ./generate_dataset.sh -v -v
 * training using Tesla V100 1GPU, 32G memory
 $ ./train.sh -v -v
 $ tensorboard --logdir data/kor/models/kor-electra-base --port port-number
+
+* when the loss seems to be saturated, stop 'train.sh' and retrain with 'num_train_steps += alpha'.
+* you are able to train with other corpus.
+  CORPUS_DATA=data/kor/corpus_news
+$ ./generate_dataset.sh -v -v
+$ ./train.sh -v -v
+$ cat data/kor/hparams.json
+{
+  "model_size": "base",
+  "learning_rate": 1e-5,
+  "generator_hidden_size": 0.333,
+  "vocab_size": 100102,
+  "do_lower_case": false,
+  "train_batch_size": 16,
+  "eval_batch_size": 32,
+  "num_train_steps": 1800000,      <- stop at 800k, alpha = 1M
+  "save_checkpoints_steps": 10000,
+  "num_eval_steps": 1000,
+  "max_seq_length": 512,
+  "model_hparam_overrides": {
+    "max_position_embeddings": 512
+  }
+}
 ```
 ![train loss](./loss240k.png)
 
