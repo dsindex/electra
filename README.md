@@ -41,15 +41,19 @@ $ cat data/kor/hparams.json
 
 - train
 ```
-$ ./generate_dataset.sh -v -v
 * training using Tesla V100 1GPU, 32G memory
+
+$ ./generate_dataset.sh -v -v
 $ ./train.sh -v -v
 $ tensorboard --logdir data/kor/models/kor-electra-base --port port-number
 
 * when the loss seems to be saturated, stop 'train.sh' and retrain with 'num_train_steps += alpha'.
+  (it will reset the initial learning rate.)
+
 * you are able to train with other corpus.
   CORPUS_DATA=data/kor/corpus_news
 $ ./generate_dataset.sh -v -v
+
 $ ./train.sh -v -v
 $ cat data/kor/hparams.json
 {
