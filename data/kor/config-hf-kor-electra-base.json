@@ -52,5 +52,5 @@
   "torchscript": false,
   "type_vocab_size": 2,
   "use_bfloat16": false,
-  "vocab_size": 100102
+  "vocab_size": 32200
 }
