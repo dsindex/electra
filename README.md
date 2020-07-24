@@ -31,6 +31,7 @@ $ cat data/kor/hparams.json
   "eval_batch_size": 32,
   "num_train_steps": 1000000,
   "save_checkpoints_steps": 1000,
+  "keep_checkpoint_max": 200,
   "num_eval_steps": 1000,
   "max_seq_length": 512,
   "model_hparam_overrides": {
@@ -66,6 +67,7 @@ $ cat data/kor/hparams.json
   "eval_batch_size": 32,
   "num_train_steps": 1880000,      <- ex) stop at 880k, alpha = 1M
   "save_checkpoints_steps": 1000,
+  "keep_checkpoint_max": 200,
   "num_eval_steps": 1000,
   "max_seq_length": 512,
   "model_hparam_overrides": {
