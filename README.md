@@ -82,8 +82,16 @@ $ cat data/kor/hparams.json
 $ python convert_electra_original_tf_checkpoint_to_pytorch.py --tf_checkpoint_path=./data/kor/models/kor-electra-base/model.ckpt-1000000 --config_file=./data/kor/config-hf-kor-electra-base.json  --pytorch_dump_path ./data/kor/pytorch_model.bin --discriminator_or_generator discriminator
 ```
 
-- multi-gpu
-  - reference : https://github.com/freedomtan/benchmarks/commit/a3b37efa0976291dca3c2dafc789c0a03889bcfe
+## Etc
+
+- how to use multi-gpu
+  - https://github.com/freedomtan/benchmarks/commit/a3b37efa0976291dca3c2dafc789c0a03889bcfe
+
+- logging to tensorboard
+  - do_eval log : https://github.com/google-research/electra/issues/3
+  - training_hooks
+    - https://github.com/dsindex/BERT-BiLSTM-CRF-NER/blob/master/bert_lstm_ner.py#L600
+    - https://github.com/dsindex/electra/blob/master/run_pretraining.py#L292
 
 ----
 
