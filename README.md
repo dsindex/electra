@@ -42,7 +42,7 @@ $ cat data/kor/hparams.json
 
 - train
 ```
-* training using Tesla V100 1GPU, 32G memory
+* training using Tesla V100 1GPU(32G memory) * 4
 
 $ ./generate_dataset.sh -v -v
 $ ./train.sh -v -v
@@ -75,7 +75,6 @@ $ cat data/kor/hparams.json
   }
 }
 ```
-![train loss](./loss945k.png)
 
 - convert to hf transformers format
 ```
