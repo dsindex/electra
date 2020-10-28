@@ -24,6 +24,7 @@ import collections
 import json
 
 import tensorflow.compat.v1 as tf
+import tensorflow
 
 import configure_pretraining
 from model import modeling
@@ -280,7 +281,11 @@ def model_fn_builder(config: configure_pretraining.PretrainingConfig):
           warmup_steps=config.num_warmup_steps,
           lr_decay_power=config.lr_decay_power
       )
-      output_spec = tf.estimator.tpu.TPUEstimatorSpec(
+      if config.use_tpu:
+        EstimatorSpecClass = tf.estimator.tpu.TPUEstimatorSpec
+      else:
+        EstimatorSpecClass = tf.estimator.EstimatorSpec
+      output_spec = EstimatorSpecClass(
           mode=mode,
           loss=model.total_loss,
           train_op=train_op,
@@ -290,7 +295,11 @@ def model_fn_builder(config: configure_pretraining.PretrainingConfig):
               config.use_tpu)]
       )
     elif mode == tf.estimator.ModeKeys.EVAL:
-      output_spec = tf.estimator.tpu.TPUEstimatorSpec(
+      if config.use_tpu:
+        EstimatorSpecClass = tf.estimator.tpu.TPUEstimatorSpec
+      else:
+        EstimatorSpecClass = tf.estimator.EstimatorSpec
+      output_spec = EstimatorSpecClass(
           mode=mode,
           loss=model.total_loss,
           eval_metrics=model.eval_metrics,
@@ -314,29 +323,41 @@ def train_or_eval(config: configure_pretraining.PretrainingConfig):
   utils.heading("Config:")
   utils.log_config(config)
 
-  is_per_host = tf.estimator.tpu.InputPipelineConfig.PER_HOST_V2
-  tpu_cluster_resolver = None
-  if config.use_tpu and config.tpu_name:
-    tpu_cluster_resolver = tf.distribute.cluster_resolver.TPUClusterResolver(
-        config.tpu_name, zone=config.tpu_zone, project=config.gcp_project)
-  tpu_config = tf.estimator.tpu.TPUConfig(
-      iterations_per_loop=config.iterations_per_loop,
-      num_shards=config.num_tpu_cores,
-      tpu_job_name=config.tpu_job_name,
-      per_host_input_for_training=is_per_host)
-  run_config = tf.estimator.tpu.RunConfig(
-      cluster=tpu_cluster_resolver,
-      model_dir=config.model_dir,
-      save_checkpoints_steps=config.save_checkpoints_steps,
-      keep_checkpoint_max=config.keep_checkpoint_max,
-      tpu_config=tpu_config)
-  model_fn = model_fn_builder(config=config)
-  estimator = tf.estimator.tpu.TPUEstimator(
-      use_tpu=config.use_tpu,
-      model_fn=model_fn,
-      config=run_config,
-      train_batch_size=config.train_batch_size,
-      eval_batch_size=config.eval_batch_size)
+  if config.use_tpu:
+    is_per_host = tf.estimator.tpu.InputPipelineConfig.PER_HOST_V2
+    tpu_cluster_resolver = None
+    if config.use_tpu and config.tpu_name:
+      tpu_cluster_resolver = tf.distribute.cluster_resolver.TPUClusterResolver(
+          config.tpu_name, zone=config.tpu_zone, project=config.gcp_project)
+    tpu_config = tf.estimator.tpu.TPUConfig(
+        iterations_per_loop=config.iterations_per_loop,
+        num_shards=config.num_tpu_cores,
+        tpu_job_name=config.tpu_job_name,
+        per_host_input_for_training=is_per_host)
+    run_config = tf.estimator.tpu.RunConfig(
+        cluster=tpu_cluster_resolver,
+        model_dir=config.model_dir,
+        save_checkpoints_steps=config.save_checkpoints_steps,
+        keep_checkpoint_max=config.keep_checkpoint_max,
+        tpu_config=tpu_config)
+    model_fn = model_fn_builder(config=config)
+    estimator = tf.estimator.tpu.TPUEstimator(
+        use_tpu=config.use_tpu,
+        model_fn=model_fn,
+        config=run_config,
+        train_batch_size=config.train_batch_size,
+        eval_batch_size=config.eval_batch_size)
+  else:
+    run_config = tf.estimator.RunConfig(
+        model_dir=config.model_dir,
+        save_checkpoints_steps=config.save_checkpoints_steps,
+        keep_checkpoint_max=config.keep_checkpoint_max)
+    model_fn = model_fn_builder(config=config)
+    estimator = tf.estimator.Estimator(
+        model_fn=tensorflow.contrib.estimator.replicate_model_fn(model_fn),
+        config=run_config,
+        params={"batch_size":config.train_batch_size}
+        )
 
   if config.do_train:
     utils.heading("Running training")

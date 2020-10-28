@@ -23,11 +23,11 @@ $ ls data/kor/corpus_news
 $ cat data/kor/hparams.json
 {
   "model_size": "base",
-  "learning_rate": 1e-5,
+  "learning_rate": 2e-4,
   "generator_hidden_size": 0.333,
   "vocab_size": 32200,
   "do_lower_case": false,
-  "train_batch_size": 16,
+  "train_batch_size": 64,
   "eval_batch_size": 32,
   "num_train_steps": 1000000,
   "save_checkpoints_steps": 1000,
@@ -59,11 +59,11 @@ $ ./train.sh -v -v
 $ cat data/kor/hparams.json
 {
   "model_size": "base",
-  "learning_rate": 1e-5,
+  "learning_rate": 2e-4,
   "generator_hidden_size": 0.333,
   "vocab_size": 32200,
   "do_lower_case": false,
-  "train_batch_size": 16,
+  "train_batch_size": 64,
   "eval_batch_size": 32,
   "num_train_steps": 1880000,      <- ex) stop at 880k, alpha = 1M
   "save_checkpoints_steps": 1000,
@@ -81,6 +81,9 @@ $ cat data/kor/hparams.json
 ```
 $ python convert_electra_original_tf_checkpoint_to_pytorch.py --tf_checkpoint_path=./data/kor/models/kor-electra-base/model.ckpt-1000000 --config_file=./data/kor/config-hf-kor-electra-base.json  --pytorch_dump_path ./data/kor/pytorch_model.bin --discriminator_or_generator discriminator
 ```
+
+- multi-gpu
+  - reference : https://github.com/freedomtan/benchmarks/commit/a3b37efa0976291dca3c2dafc789c0a03889bcfe
 
 ----
 

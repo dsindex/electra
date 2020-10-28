@@ -25,7 +25,7 @@ from __future__ import print_function
 import collections
 import re
 import tensorflow.compat.v1 as tf
-
+import tensorflow
 
 def create_optimizer(
     loss, learning_rate, num_train_steps, weight_decay_rate=0.0, use_tpu=False,
@@ -54,14 +54,22 @@ def create_optimizer(
       beta_2=0.999,
       epsilon=1e-6,
       exclude_from_weight_decay=["LayerNorm", "layer_norm", "bias"])
+
   if use_tpu:
     optimizer = tf.tpu.CrossShardOptimizer(optimizer)
+  else:
+    optimizer = tensorflow.contrib.estimator.TowerOptimizer(optimizer)
 
   tvars = tf.trainable_variables()
   grads = tf.gradients(loss, tvars)
   (grads, _) = tf.clip_by_global_norm(grads, clip_norm=1.0)
-  train_op = optimizer.apply_gradients(
-      zip(grads, tvars), global_step=global_step)
+
+  if use_tpu:
+    train_op = optimizer.apply_gradients(
+        zip(grads, tvars), global_step=global_step)
+  else:
+    train_op = optimizer.minimize(loss, tensorflow.train.get_global_step())
+
   new_global_step = global_step + 1
   train_op = tf.group(train_op, [global_step.assign(new_global_step)])
   return train_op
