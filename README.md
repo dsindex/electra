@@ -23,7 +23,7 @@ $ ls data/kor/corpus_news
 $ cat data/kor/hparams.json
 {
   "model_size": "base",
-  "learning_rate": 2e-4,
+  "learning_rate": 5e-5,
   "generator_hidden_size": 0.333,
   "vocab_size": 32200,
   "do_lower_case": false,
@@ -59,7 +59,7 @@ $ ./train.sh -v -v
 $ cat data/kor/hparams.json
 {
   "model_size": "base",
-  "learning_rate": 2e-4,
+  "learning_rate": 5e-5,
   "generator_hidden_size": 0.333,
   "vocab_size": 32200,
   "do_lower_case": false,
